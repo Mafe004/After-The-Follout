@@ -14,4 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Settings/Scenes/projecto.unity
     guid: 1fcebffadd7934344b8302ed74a8d9d8
+  - enabled: 1
+    path: Assets/Settings/Scenes/Terreno_Desierto.unity
+    guid: 6fda5f68d71bab543bcfff2f30b8d5f3
+  - enabled: 1
+    path: Assets/Settings/Scenes/Sotano.unity
+    guid: 75930a70493c23f42b139aaad4260021
   m_configObjects: {}

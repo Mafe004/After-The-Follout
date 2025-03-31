@@ -64,12 +64,12 @@ public class FollowIA : MonoBehaviour
             ControlerPlayer playerScript = player.GetComponent<ControlerPlayer>();
             if (playerScript != null)
             {
-                playerScript.RecibirDaño(attackDamage);
+                playerScript.RecibirDano(attackDamage);
             }
         }
     }
 
-    public void RecibirDaño(int cantidad)
+    public void RecibirDano(int cantidad)
     {
         vida -= cantidad;
 
@@ -82,7 +82,7 @@ public class FollowIA : MonoBehaviour
     void Morir()
     {
         Debug.Log("El enemigo ha muerto");
-        enemyAnimator.SetTrigger("Muerte"); // Asegúrate de tener una animación de muerte
-        Destroy(gameObject, 0.5f); // Elimina el enemigo después de la animación
+        enemyAnimator.SetTrigger("Muerte"); // Asegï¿½rate de tener una animaciï¿½n de muerte
+        Destroy(gameObject, 0.5f); // Elimina el enemigo despuï¿½s de la animaciï¿½n
     }
 }
