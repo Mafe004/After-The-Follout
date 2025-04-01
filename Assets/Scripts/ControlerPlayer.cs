@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class ControlerPlayer : MonoBehaviour
 {
-    [SerializeField] private float speed = 3f;
-    private Vector2 moveInput;
-    private Animator playerAnimator;
-    private Rigidbody2D playerRb;
+    [SerializeField] private float speed = 3f; // Velocidad del jugador
+    private Vector2 moveInput; // Entrada de movimiento del jugador
+    private Animator playerAnimator; // Controlador de animaciones
+    private Rigidbody2D playerRb; // Componente de fÃ­sica del jugador
 
-    [SerializeField] private GameObject Ataque;
-    [SerializeField] private GameObject Sangre;
-    [SerializeField] private int vida = 100;
-    [SerializeField] private int dañoAtaque = 1; // Daño que el jugador hace al enemigo
+    [SerializeField] private GameObject Ataque; // Objeto de ataque
+    [SerializeField] private GameObject Sangre; // Objeto para mostrar sangre
+    [SerializeField] private int vida = 100; // Vida del jugador
+    [SerializeField] private int danoAtaque = 1; // Dano que el jugador hace al enemigo
     [SerializeField] private float attackRange = 1.5f; // Rango de ataque
 
     void Start()
@@ -22,18 +22,32 @@ public class ControlerPlayer : MonoBehaviour
 
         Ataque.SetActive(false);
         Sangre.SetActive(false);
+
+        // Buscar el punto de entrada al iniciar la escena
+        GameObject puntoEntrada = GameObject.Find("DatosJuego.puntoEntrada");
+        if (puntoEntrada != null)
+        {
+            transform.position = puntoEntrada.transform.position;
+        }
+        else
+        {
+            Debug.LogWarning("No se encontrÃ³ el objeto PuntoEntradaDesierto");
+        }
     }
 
     void Update()
     {
+        // Obtener la entrada del jugador
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
         moveInput = new Vector2(moveX, moveY).normalized;
 
+        // Actualizar animaciones
         playerAnimator.SetFloat("Horizontal", moveX);
         playerAnimator.SetFloat("Vertical", moveY);
         playerAnimator.SetFloat("Speed", moveInput.sqrMagnitude);
 
+         // Verificar ataque
         if (Input.GetKeyDown(KeyCode.E))
         {
             StartCoroutine(RealizarAtaque());
@@ -42,6 +56,7 @@ public class ControlerPlayer : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // Aplicar movimiento al jugador
         playerRb.velocity = moveInput * speed;
     }
 
@@ -53,14 +68,15 @@ public class ControlerPlayer : MonoBehaviour
         Ataque.SetActive(false);
     }
 
-    public void RecibirDaño(int cantidad)
+    public void RecibirDano(int cantidad)
     {
+        // Reducir vida del jugador
         vida -= cantidad;
 
         if (vida <= 0)
         {
             Debug.Log("Jugador ha muerto");
-            // Aquí puedes poner una animación de muerte o reiniciar el nivel
+            // Aqui puedes poner una animacion de muerte o reiniciar el nivel
         }
 
         StartCoroutine(MostrarSangre());
@@ -75,6 +91,7 @@ public class ControlerPlayer : MonoBehaviour
 
     void GolpearEnemigo()
     {
+        // Detectar enemigos cercanos para golpearlos
         Collider2D[] enemigos = Physics2D.OverlapCircleAll(transform.position, attackRange);
 
         foreach (Collider2D enemigo in enemigos)
@@ -84,7 +101,7 @@ public class ControlerPlayer : MonoBehaviour
                 FollowIA enemigoScript = enemigo.GetComponent<FollowIA>();
                 if (enemigoScript != null)
                 {
-                    enemigoScript.RecibirDaño(dañoAtaque);
+                    enemigoScript.RecibirDano(danoAtaque);
                 }
             }
         }
